@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .invoice {
+            width: 150mm; /* A4 width */
+            height: 297mm; /* A4 height */
+            margin: 10mm auto;
+            padding: 10mm;
+            border: 1px solid #000;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-details {
+            text-align: right;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .invoice-table th,
+        .invoice-table td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice-total {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="header">
+            <h1>Invoice</h1>
+        </div>
+        <div class="invoice-details">
+            <p>Order Date: {{ ord_data.created_at }}</p>
+            <h5>Delivery Address</h5>
+            <p><strong>Name: {{ addr.name }}</strong></p>
+            <p><strong>Address: {{ addr.addr }}</strong></p>
+            <p><strong>Pin: {{ addr.pin }}</strong></p>
+			<p><strong>Area: {{ addr.area }}</strong></p>
+			<p><strong>City: {{ addr.city }}</strong></p>
+            <p><strong>State: {{ addr.state }}</strong></p>
+            <p><strong>Type: {{ addr.type }}</strong></p>
+            <p><strong>Contact: {{ addr.ph_no }}</strong></p>
+        </div>
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    
+                    <th>Sub Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for o in ord %}
+                <tr>
+                    <td>{{ o.item.prd_id.prd_name }}</td>
+                            
+                    <td>{{ o.qty }}</td>
+                            
+                    <td>{{ o.sub_tot}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="invoice-total">
+            <p><strong>Total: {{ total }}</strong></p>
+			{% if coupon %}
+            <p><strong>Coupon Applied : {{coupon.code}}</strong></p>
+			{% endif %}
+            <p><strong>Payable Amount : {{ord_data.tot_amount}}</strong></p>
+        </div>
+    </div>
+</body>
+</html>

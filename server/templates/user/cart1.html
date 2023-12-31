@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<!-- Mirrored from p.w3layouts.com/demos_new/template_demo/11-06-2021/electronics-mart-liberty-demo_Free/1081434887/web/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 15 Sep 2023 13:02:11 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+	<title>Cart</title>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Custom-Files -->
+	<link href="{% static "user/css/bootstrap.css" %}" rel="stylesheet" type="text/css" media="all" />
+	<!-- Bootstrap css -->
+	<link href="{% static "user/css/style.css" %}" rel="stylesheet" type="text/css" media="all" />
+	<!-- Main css -->
+	<link rel="stylesheet" href="{% static "user/css/fontawesome-all.css" %}">
+	<!-- Font-Awesome-Icons-CSS -->
+	<link href="{% static "user/css/popuo-box.css" %}" rel="stylesheet" type="text/css" media="all" />
+	<!-- pop-up-box -->
+	<link href="{% static "user/css/menu.css" %}" rel="stylesheet" type="text/css" media="all" />
+	<!-- menu style -->
+	<!-- //Custom-Files -->
+
+	<!-- web fonts -->
+	<link href="http://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+		rel="stylesheet">
+	<!-- //web fonts -->
+</head>
+<body><link rel="stylesheet" href="../../../../../../assests/css/font-awesome.min.css">
+    <style>
+        * {
+          box-sizing: border-box;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+        }
+        
+        
+        #w3lDemoBar.w3l-demo-bar {
+          top: 0;
+          right: 0;
+          bottom: 0;
+          z-index: 9999;
+          padding: 40px 5px;
+          padding-top:70px;
+          margin-bottom: 70px;
+          background: #0D1326;
+          border-top-left-radius: 9px;
+          border-bottom-left-radius: 9px;
+        }
+        
+        #w3lDemoBar.w3l-demo-bar a {
+          display: block;
+          color: #e6ebff;
+          text-decoration: none;
+          line-height: 24px;
+          opacity: .6;
+          margin-bottom: 20px;
+          text-align: center;
+        }
+        
+        #w3lDemoBar.w3l-demo-bar span.w3l-icon {
+          display: block;
+        }
+        
+        #w3lDemoBar.w3l-demo-bar a:hover {
+          opacity: 1;
+        }
+        
+        #w3lDemoBar.w3l-demo-bar .w3l-icon svg {
+          color: #e6ebff;
+        }
+        #w3lDemoBar.w3l-demo-bar .responsive-icons {
+          margin-top: 30px;
+          border-top: 1px solid #41414d;
+          padding-top: 40px;
+        }
+        #w3lDemoBar.w3l-demo-bar .demo-btns {
+          border-top: 1px solid #41414d;
+          padding-top: 30px;
+        }
+        #w3lDemoBar.w3l-demo-bar .responsive-icons a span.fa {
+          font-size: 26px;
+        }
+        #w3lDemoBar.w3l-demo-bar .no-margin-bottom{
+          margin-bottom:0;
+        }
+        .toggle-right-sidebar span {
+          background: #0D1326;
+          width: 50px;
+          height: 50px;
+          line-height: 50px;
+          text-align: center;
+          color: #e6ebff;
+          border-radius: 50px;
+          font-size: 26px;
+          cursor: pointer;
+          opacity: .5;
+        }
+        .pull-right {
+          float: right;
+          position: fixed;
+          right: 0px;
+          top: 70px;
+          width: 90px;
+          z-index: 99999;
+          text-align: center;
+        }
+        /* ============================================================
+        RIGHT SIDEBAR SECTION
+        ============================================================ */
+        
+        #right-sidebar {
+          width: 90px;
+          position: fixed;
+          height: 100%;
+          z-index: 1000;
+          right: 0px;
+          top: 0;
+          margin-top: 60px;
+          -webkit-transition: all .5s ease-in-out;
+          -moz-transition: all .5s ease-in-out;
+          -o-transition: all .5s ease-in-out;
+          transition: all .5s ease-in-out;
+          overflow-y: auto;
+        }
+        
+        
+        /* ============================================================
+        RIGHT SIDEBAR TOGGLE SECTION
+        ============================================================ */
+        
+        .hide-right-bar-notifications {
+          margin-right: -300px !important;
+          -webkit-transition: all .3s ease-in-out;
+          -moz-transition: all .3s ease-in-out;
+          -o-transition: all .3s ease-in-out;
+          transition: all .3s ease-in-out;
+        }
+        
+        
+        
+        @media (max-width: 992px) {
+          #w3lDemoBar.w3l-demo-bar a.desktop-mode{
+              display: none;
+        
+          }
+        }
+        @media (max-width: 767px) {
+          #w3lDemoBar.w3l-demo-bar a.tablet-mode{
+              display: none;
+        
+          }
+        }
+        @media (max-width: 568px) {
+          #w3lDemoBar.w3l-demo-bar a.mobile-mode{
+              display: none;
+          }
+          #w3lDemoBar.w3l-demo-bar .responsive-icons {
+              margin-top: 0px;
+              border-top: none;
+              padding-top: 0px;
+          }
+          #right-sidebar,.pull-right {
+              width: 90px;
+          }
+          #w3lDemoBar.w3l-demo-bar .no-margin-bottom-mobile{
+              margin-bottom: 0;
+          }
+        }
+    </style>
+    <div class="agile-main-top">
+		<div class="container">
+			<div class="row main-top-w3l py-2">
+				<div class="col-lg-3 col-sm-4 header-most-top">
+					{% if not request.user.is_authenticated %}
+					<p class=" text-lg-left text-center">Welcome to our shop!</p>
+					{% else %}
+					<p class=" text-lg-left text-center">Welcome {{request.user}}!</p>
+					{% endif %}
+				</div>
+				<div class="col-lg-9 col-sm-8 header-right ml-auto text-sm-right text-center">
+					<!-- header lists -->
+					<ul class="top-header-lists">
+						
+						
+						<li class="mx-3">
+							<a href="{% url "user_logout" %}"  class="">
+								<i class="fas fa-sign-in-alt mr-1"></i> Log Out </a>
+						</li>
+						
+					</ul>
+					<!-- //header lists -->
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="header-bot my-md-4 my-3">
+		<div class="container">
+			<div class="row header-bot_inner_wthreeinfo_header_mid align-items-center">
+				<!-- logo -->
+				<div class="col-lg-3 col-md-4 logo_agile">
+					<h1>
+						<a href="index.html"><span>H</span>phones <span>S</span>tore</a>
+					</h1>
+				</div>
+				<!-- //logo -->
+				<!-- header-bot -->
+				<div class="col-lg-9 col-md-8 header">
+					<div class="row">
+						<!-- search -->
+						<div class="col-lg-9 col-sm-8 agileits_search">
+							<form class="form-inline" action="#" method="post" style="max-width:600px;">
+								<input class="form-control" type="search"
+									placeholder="Search for products, brands and more" aria-label="Search" required>
+								<button class="btn" type="submit"><i class="fa fa-search"
+										aria-hidden="true"></i></button>
+							</form>
+						</div>
+						<!-- //search -->
+						<!-- cart details -->
+						<div
+							class="col-lg-3 col-sm-4 top_nav_right text-center mt-sm-0 mt-2 d-flex align-items-center justify-content-between">
+							<div class="cart-store">
+								<!-- toggle switch for light and dark theme -->
+								<div class="cont-ser-position">
+									<nav class="navigation">
+										<div class="theme-switch-wrapper">
+											<label class="theme-switch" for="checkbox">
+												<input type="checkbox" id="checkbox">
+												<div class="mode-container">
+													<i class="gg-sun"></i>
+													<i class="gg-moon"></i>
+												</div>
+											</label>
+										</div>
+									</nav>
+								</div>
+								<!-- //toggle switch for light and dark theme -->
+							</div>
+							{% if request.user.is_authenticated %}
+							<div class="cart-store">
+								<a href="{% url "view_wishlist" %}"><i class="far fa-heart"></i></a>
+							</div>
+							{% endif %}
+							<div class="wthreecartaits wthreecartaits2 cart cart box_1">
+								{% if request.user.is_authenticated %}
+								
+										<a href="{% url "cart" %}"><img src="{% static "user/images/cart.png" %}" alt="" class="img-fluid"> Cart</a>
+									
+								{% endif %}
+							</div>
+						</div>
+						<!-- //cart details -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="navbar-inner">
+		<div class="container">
+			<nav class="navbar navbar-expand-lg navbar-light">
+				<div class="agileits-navi_search">
+					
+				</div>
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+					aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav text-center ml-auto">
+						<li class="nav-item active mr-lg-2 mb-lg-0 mb-2">
+							<a class="nav-link" href="{% url "index" %}">Home
+								<span class="sr-only">(current)</span>
+							</a>
+						</li>
+						
+						{% if request.user.is_authenticated %}
+            <li class="nav-item">
+							<a class="nav-link" href="{% url "profile" %}">Profile</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{% url "notification" %}">Notifications</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{% url "address" %}">Addresses</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{% url "orders" %}">Orders</a>
+						</li>
+						{% endif %}
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+    <div style="margin: 8px auto; display: block; text-align:center;">
+
+        <!---728x90--->
+        
+         
+        </div>
+            <!-- checkout page -->
+            <div class="privacy py-5">
+                <div class="container py-md-5 py-4">
+                    <div class="checkout-right">
+                        
+                            
+                        {% if crt %}
+                        <div class="table-responsive">
+                            <table class="timetable_sub">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Image</th>
+                                        <th>Quality</th>
+                                        <th>Price</th>
+                                        <th>Sub Total</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for c in crt %}
+                                    <tr class="rem1 product_data">
+                                        
+                                        <td class="invert">{{c.prd_id.prd_name}}</td>
+                                        <td class="invert-image">
+                                            
+                                                <img src="{{c.prd_var.p1_img.url}}" alt=" " style="height:40px;width:40px;" class="img-responsive">
+                                            
+                                        </td>
+                                        <td class="invert">
+                                            
+                                            <div class="cart-item"> 
+                                                         
+                                                <button class="decrease-quantity" data-item-id="{{ c.id }}">-</button>
+                                                    
+                                                    <div class="entry value">
+                                                        <span id="quantity{{c.id}}">{{c.qty}}</span>
+                                                    </div>
+                                                
+                                                <button class="increase-quantity" data-item-id="{{ c.id }}">+</button>
+                                                
+                                            </div>        
+                                                
+                                        </td>
+                                        <td class="invert">{{c.prd_var.cur_price}}</td>
+                                        <td id="subtot{{c.id}}" class="invert">{% widthratio c.prd_var.cur_price 1 c.qty %}</td>
+                                        <td class="invert">
+                                            <div class="rem">
+                                                <a href="{% url "rem_cart" c.id%}"><div class="close1"> </div></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        {% else %}
+                        <h4 class="mb-sm-4 mb-3">Cart is Empty</h4>
+                        {% endif %}
+                    </div>
+                    <div class="checkout-left">
+                        <div class="address_form_agile mt-sm-5 mt-4">
+                            <h4 id="total" class="mb-sm-4 mb-3">Cart Total : {{tot}}</h4>
+                            {% if request.user.is_authenticated %}
+                            <div class="checkout-right-basket">
+                                <a href="{% url "view_add" %}">Checkout
+                                    <span class="far fa-hand-point-right"></span>
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //checkout page -->
+			
+        
+            
+        <div style="margin: 8px auto; display: block; text-align:center;">
+        </body>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+            $(document).ready(function() 
+            {
+              $(".increase-quantity").click(function() 
+              {
+                const itemId = $(this).data("item-id");
+                
+                $.ajax({
+                  type: "GET",
+                  url: `/inc_qty/${itemId}/`,
+                  success: function(data) 
+                  {
+                    if(data.Success){
+                        // Update the quantity displayed on the page
+                        $(`#quantity${itemId}`).text(data.new_qty);
+                        console.log(data.price)
+                        let subTotal = data.new_qty*data.price
+                        $(`#subtot${itemId}`).text(subTotal)
+                        $(`#total`).text(`Cart Total : ${data.tot}`)
+
+                    }else{
+                        Swal.fire('Ooops!','Out of Stock','error')
+                    }
+                  },
+                });
+              });
+              $(".decrease-quantity").click(function() 
+              {
+                const itemId = $(this).data("item-id");
+                
+                $.ajax({
+                  type: "GET",
+                  url: `/dec_qty/${itemId}/`,
+                  success: function(data) 
+                  {
+                    // Update the quantity displayed on the page
+                    $(`#quantity${itemId}`).text(data.new_qty);
+                    console.log(data.price)
+                    let subTotal = data.new_qty*data.price
+                    $(`#subtot${itemId}`).text(subTotal)
+                    $(`#total`).text(`Cart Total : ${data.tot}`)
+                  },
+                });
+              });
+            });
+            </script>
+            </html>
