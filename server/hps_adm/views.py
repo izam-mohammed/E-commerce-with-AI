@@ -15,6 +15,11 @@ from weasyprint import HTML
 
 
 def adm_index(request):
+    """
+    View for the admin dashboard.
+
+    Displays various statistics like order count, total revenue, active customers, and monthly order counts.
+    """
     if request.user.is_superuser:
         item_count = OrderItem.objects.filter(status="Order Placed").count()
         total_revenue = (
@@ -47,6 +52,11 @@ def adm_index(request):
 
 
 def adm_login(request):
+    """
+    View for admin login.
+
+    Authenticates the admin and redirects to the admin dashboard if successful.
+    """
     if request.method == "POST":
         uname = request.POST.get("username")
         upass = request.POST.get("password")
@@ -62,6 +72,11 @@ def adm_login(request):
 
 
 def view_cat(request):
+    """
+    View for displaying all categories.
+
+    Shows a list of all categories for admin users.
+    """
     if request.user.is_superuser:
         cat = Category.objects.all().order_by("-id")
         context = {"cat": cat}
@@ -71,6 +86,11 @@ def view_cat(request):
 
 
 def view_brd(request):
+    """
+    View for displaying all brands.
+
+    Shows a list of all brands for admin users.
+    """
     if request.user.is_superuser:
         brd = Brand.objects.all().order_by("-id")
         context = {"brd": brd}
@@ -80,6 +100,11 @@ def view_brd(request):
 
 
 def view_prd(request):
+    """
+    View for displaying all products.
+
+    Shows a list of all products for admin users.
+    """
     if request.user.is_superuser:
         prd = Product.objects.all().select_related("brd_id", "cat_id").order_by("-id")
         context = {"prd": prd}
@@ -89,6 +114,11 @@ def view_prd(request):
 
 
 def add_cat(request):
+    """
+    Adds a new category if the user is a superuser.
+
+    Checks for existing categories, and if none, saves the new category and redirects to view_cat.
+    """
     if request.user.is_superuser:
         if request.method == "POST":
             cname = request.POST["name"]
@@ -108,6 +138,11 @@ def add_cat(request):
 
 
 def add_brd(request):
+    """
+    Adds a new brand if the user is a superuser.
+
+    Checks for existing brands, and if none, saves the new brand and redirects to view_brd.
+    """
     if request.user.is_superuser:
         if request.method == "POST":
             bname = request.POST["name"]
@@ -127,12 +162,20 @@ def add_brd(request):
 
 
 def adm_logout(request):
+    """
+    Logs out the admin user and redirects to adm_login.
+    """
     logout(request)
     # messages.info(request,"Logout Success")
     return redirect(adm_login)
 
 
 def up_cat(request, cid):
+    """
+    Updates a category based on the provided category ID.
+
+    Validates and saves the updated category details and redirects to view_cat.
+    """
     cat = Category.objects.get(id=cid)
     if request.method == "POST":
         cname = request.POST["name"]
@@ -157,6 +200,11 @@ def up_cat(request, cid):
 
 
 def up_brd(request, bid):
+    """
+    Updates a brand based on the provided brand ID.
+
+    Validates and saves the updated brand details and redirects to view_cat.
+    """
     brd = Brand.objects.get(id=bid)
     if request.method == "POST":
         bname = request.POST["name"]
@@ -181,6 +229,11 @@ def up_brd(request, bid):
 
 
 def add_prd(request):
+    """
+    Adds a new product if the user is a superuser.
+
+    Validates and saves the new product details and redirects to view_prd.
+    """
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
     context = {"cat": cat, "brd": brd}
@@ -209,6 +262,11 @@ def add_prd(request):
 
 
 def up_prd(request, pid):
+    """
+    Updates a product based on the provided product ID.
+
+    Validates and saves the updated product details and redirects to view_prd.
+    """
     prd = Product.objects.filter(id=pid).select_related("brd_id", "cat_id")[0]
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
@@ -230,6 +288,11 @@ def up_prd(request, pid):
 
 
 def variant(request):
+    """
+    Displays all product variations for superuser.
+
+    Retrieves and displays all product variations.
+    """
     if request.user.is_superuser:
         prd = PrdVariation.objects.all().select_related("prd_id").order_by("-id")
         context = {"prd": prd}
@@ -239,6 +302,11 @@ def variant(request):
 
 
 def add_var(request):
+    """
+    Adds a new product variation if the user is a superuser.
+
+    Validates and saves the new product variation details and redirects to variant.
+    """
     prd = Product.objects.all()
     context = {"prd": prd}
     if request.user.is_superuser:
@@ -273,6 +341,11 @@ def add_var(request):
 
 
 def up_var(request, pid):
+    """
+    Updates a product variation based on the provided variation ID.
+
+    Validates and saves the updated variation details and redirects to variant.
+    """
     prdt = Product.objects.all()
     prd = PrdVariation.objects.filter(id=pid).select_related("prd_id")[0]
     print(prd)
@@ -308,16 +381,22 @@ def up_var(request, pid):
 
 
 def reports(request):
+    """
+    Displays all order reports.
+
+    Retrieves and displays all order reports for the superuser.
+    """
     all_report = Order.objects.all().select_related("user").order_by("-id")
     context = {"all_report": all_report}
     return render(request, "adm/reports.html", context)
 
 
-# def view_order(request,order_id):
-#     selected_order=Or
-
-
 def date_report(request):
+    """
+    Displays order reports for a specific date.
+
+    Retrieves and displays order reports based on the selected date.
+    """
     if request.method == "POST":
         selected_date = request.POST["selected_date"]
         all_report = Order.objects.filter(created_at=selected_date).order_by("-id")
@@ -327,6 +406,11 @@ def date_report(request):
 
 
 def week_report(request):
+    """
+    Displays order reports for a specific week.
+
+    Retrieves and displays order reports based on the selected week.
+    """
     if request.method == "POST":
         start_date = request.POST["start_date"]
         end_date = request.POST["end_date"]
@@ -343,6 +427,11 @@ def week_report(request):
 
 
 def year_report(request):
+    """
+    Displays order reports for a specific year.
+
+    Retrieves and displays order reports based on the selected year.
+    """
     if request.method == "POST":
         selected_year = request.POST["selected_year"]
         all_report = Order.objects.filter(created_at__year=selected_year).order_by(
@@ -354,6 +443,11 @@ def year_report(request):
 
 
 def veiw_report(request, order_id):
+    """
+    View for displaying detailed information about a specific order.
+
+    Allows admin users to view and update the status of an order.
+    """
     order_details = Order.objects.get(id=order_id)
     order_items = Order.objects.get(id=order_id).new_order.all().select_related("item")
     total = 0
@@ -374,6 +468,11 @@ def veiw_report(request, order_id):
 
 
 def add_ban(request):
+    """
+    View for adding a new banner.
+
+    Allows admin users to add a new banner with multiple images.
+    """
     if request.method == "POST":
         banner_name = request.POST["name"]
         image_1 = request.FILES["img1"]
@@ -394,11 +493,21 @@ def add_ban(request):
 
 
 def banner(request):
+    """
+    View for displaying all banners.
+
+    Shows a list of all banners for admin users.
+    """
     ban = Banner.objects.all().order_by("-id")
     return render(request, "adm/banner.html", {"ban": ban})
 
 
 def up_ban(request, ban_id):
+    """
+    View for updating a banner.
+
+    Allows admin users to update the details and images of a specific banner.
+    """
     ban = Banner.objects.get(id=ban_id)
     if request.method == "POST":
         banner1_image = request.FILES.get("img1")
@@ -425,6 +534,11 @@ def up_ban(request, ban_id):
 
 
 def active_banner(request, banner_id):
+    """
+    View for activating a specific banner.
+
+    Sets the selected banner as active and deactivates all other banners.
+    """
     ban = Banner.objects.all()
     ban.update(status=False)
     ban = Banner.objects.get(id=banner_id)
@@ -434,6 +548,11 @@ def active_banner(request, banner_id):
 
 
 def add_coupon(request):
+    """
+    View for adding a new coupon.
+
+    Allows admin users to add a new coupon code with a specific discount value.
+    """
     if request.method == "POST":
         code = request.POST["code"]
         value = request.POST["value"]
@@ -447,11 +566,21 @@ def add_coupon(request):
 
 
 def view_coupon(request):
+    """
+    View for displaying all coupons.
+
+    Shows a list of all active and inactive coupons for admin users.
+    """
     coupons = Coupon.objects.all().order_by("-id")
     return render(request, "adm/view_coupon.html", {"coupons": coupons})
 
 
 def edit_coupon(request, coupon_id):
+    """
+    View for editing the status of a coupon.
+
+    Allows admin users to activate or deactivate a specific coupon.
+    """
     coupons = Coupon.objects.get(id=coupon_id)
     if request.method == "POST":
         coupons.status = request.POST["status"]
@@ -461,6 +590,9 @@ def edit_coupon(request, coupon_id):
 
 
 def export_report(request):
+    """
+    View for exporting the complete order report as a PDF.
+    """
     orders = Order.objects.all().select_related("user").order_by("-id")
     context = {"orders": orders}
     html_string = get_template("adm/export_report.html").render(context)
@@ -477,6 +609,9 @@ def export_report(request):
 
 
 def export_date(request, selected_date):
+    """
+    View for exporting the order report for a specific date as a PDF.
+    """
     orders = Order.objects.filter(created_at=selected_date).order_by("-id")
     string = "Reports of date " + selected_date
     context = {"orders": orders, "string": string}
@@ -494,6 +629,9 @@ def export_date(request, selected_date):
 
 
 def export_week(request, start_date, end_date):
+    """
+    View for exporting the order report for a specific week as a PDF.
+    """
     print(start_date)
     print(end_date)
     print(end_date)
@@ -516,6 +654,9 @@ def export_week(request, start_date, end_date):
 
 
 def export_year(request, selected_year):
+    """
+    View for exporting the order report for a specific year as a PDF.
+    """
     orders = Order.objects.filter(created_at__year=selected_year).order_by("-id")
     string = "Reports of year " + selected_year
     context = {"orders": orders, "string": string}

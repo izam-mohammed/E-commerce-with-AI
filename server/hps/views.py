@@ -16,6 +16,9 @@ from weasyprint import HTML
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
+    """
+    Renders the index page with categories, brands, products, and banners.
+    """
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
     prd = PrdVariation.objects.select_related("prd_id__brd_id").filter(prd_status=True)
@@ -25,6 +28,9 @@ def index(request):
 
 
 def register(request):
+    """
+    Handles user registration. Creates a new user and wallet if registration is successful.
+    """
     if request.method == "POST":
         uname = request.POST["uname"]
         uemail = request.POST["uemail"]
@@ -52,6 +58,9 @@ def register(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_login(request):
+    """
+    Handles user login. Redirects to the index page upon successful login.
+    """
     if request.user.is_authenticated:
         return redirect(index)
     if request.method == "POST":
@@ -70,6 +79,9 @@ def user_login(request):
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_logout(request):
+    """
+    Logs out the user and redirects to the index page.
+    """
     if "coupon" in request.session:
         del request.session["coupon"]
     logout(request)
@@ -78,6 +90,9 @@ def user_logout(request):
 
 
 def view_prod(request, pid):
+    """
+    Renders the product page with details and variations.
+    """
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
     prd = PrdVariation.objects.get(id=pid)  # selected product data
@@ -103,6 +118,9 @@ def view_prod(request, pid):
 
 
 def brand_wise(request, bid):
+    """
+    Filters and renders products based on a specific brand.
+    """
     prd = PrdVariation.objects.filter(prd_id__brd_id=bid)
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
@@ -111,6 +129,9 @@ def brand_wise(request, bid):
 
 
 def cat_wise(request, cid):
+    """
+    Filters and renders products based on a specific category.
+    """
     prd = PrdVariation.objects.filter(prd_id__cat_id=cid)
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
@@ -119,6 +140,9 @@ def cat_wise(request, cid):
 
 
 def search_result(request):
+    """
+    Filters and renders products based on search criteria.
+    """
     cat = Category.objects.filter(cat_status=True)
     brd = Brand.objects.filter(brd_status=True)
     if request.method == "POST":
@@ -146,6 +170,9 @@ def search_result(request):
 
 
 def cart(request):
+    """
+    Renders the user's shopping cart with selected items.
+    """
     cur_user = request.user
     crt = Cart.objects.filter(user=cur_user, val=False).select_related("prd_id")
     print(crt.query)
@@ -157,6 +184,9 @@ def cart(request):
 
 
 def add_add(request):
+    """
+    Handles adding a new address for the user.
+    """
     if request.user.is_authenticated:
         cur_user = request.user
         if request.method == "POST":
@@ -186,6 +216,9 @@ def add_add(request):
 
 
 def view_add(request):
+    """
+    Renders the user's saved addresses for viewing.
+    """
     if request.user.is_authenticated:
         cur_user = request.user
         adds = Address.objects.filter(user=cur_user, remove_address=True)
@@ -195,6 +228,9 @@ def view_add(request):
 
 
 def add_cart(request, pid):
+    """
+    Adds a product to the user's shopping cart.
+    """
     if request.user.is_authenticated:
         cur_user = request.user
         prd = PrdVariation.objects.get(id=pid)
@@ -209,12 +245,18 @@ def add_cart(request, pid):
 
 
 def rem_cart(request, cid):
+    """
+    Removes a product from the user's shopping cart.
+    """
     crt = Cart.objects.get(id=cid, val=False)
     crt.delete()
     return redirect(cart)
 
 
 def inc_qty(request, item_id):
+    """
+    Increases the quantity of a product in the shopping cart.
+    """
     cart_item = Cart.objects.get(id=item_id, val=False)
     prd = PrdVariation.objects.get(id=cart_item.prd_var_id)
     print(prd)
@@ -241,6 +283,9 @@ def inc_qty(request, item_id):
 
 
 def dec_qty(request, item_id):
+    """
+    Decreases the quantity of a product in the shopping cart.
+    """
     cart_item = Cart.objects.get(id=item_id, val=False)
     prd = PrdVariation.objects.get(id=cart_item.prd_var_id)
     if cart_item.qty > 1:
@@ -262,6 +307,9 @@ def dec_qty(request, item_id):
 
 
 def checkout(request, ad_id):
+    """
+    Handles the checkout process, calculating the total amount and applying discounts.
+    """
     crt = Cart.objects.filter(user=request.user, val=False).select_related("prd_id")
     addr = Address.objects.get(id=ad_id)
     tot = 0
@@ -297,6 +345,9 @@ def checkout(request, ad_id):
 
 
 def create_order(request, ad_id):
+    """
+    Creates a new order based on the user's cart and selected address.
+    """
     crt = Cart.objects.filter(user=request.user, val=False)
     ord_list = []
     item_list = []
@@ -344,6 +395,9 @@ def create_order(request, ad_id):
 
 
 def cod_paid(request, or_id):
+    """
+    Handles Cash on Delivery (COD) payment confirmation.
+    """
     new_order = Order.objects.get(id=or_id)
     new_order.pay_method = "COD"
     new_order.status = "Confirmed"
@@ -354,6 +408,9 @@ def cod_paid(request, or_id):
 
 @csrf_exempt
 def r_paid(request, or_id):
+    """
+    Handles Razor Pay payment confirmation.
+    """
     new_order = Order.objects.get(id=or_id)
     r_tot = new_order.tot_amount * 100
     client = razorpay.Client(
@@ -371,6 +428,9 @@ def r_paid(request, or_id):
 
 
 def orders(request):
+    """
+    Renders the user's order history.
+    """
     if request.user.is_authenticated:
         ord = Order.objects.filter(user_id=request.user).order_by("-id")
         return render(request, "user/orders.html", {"ord": ord})
@@ -379,6 +439,9 @@ def orders(request):
 
 
 def ord_details(request, or_id):
+    """
+    Renders the details of a specific order.
+    """
     ord = Order.objects.get(id=or_id).new_order.all().select_related("item")
     total = 0
     for o in ord:
@@ -400,10 +463,16 @@ def ord_details(request, or_id):
 
 
 def sample(request):
+    """
+    Renders a sample page.
+    """
     return render(request, "user/sample.html")
 
 
 def cancel_order(request, order_id):
+    """
+    Cancels a specific order and processes refunds if applicable.
+    """
     order = Order.objects.get(id=order_id)
     order.status = "Cancelled"
     if order.pay_method == "Razor Pay":
@@ -416,6 +485,9 @@ def cancel_order(request, order_id):
 
 
 def return_order(request, order_id):
+    """
+    Initiates a return for a specific order and processes refunds if applicable.
+    """
     order = Order.objects.get(id=order_id)
     order.status = "Return"
     if order.pay_method == "Razor Pay":
@@ -428,16 +500,25 @@ def return_order(request, order_id):
 
 
 def notification(request):
+    """
+    Renders the user's notification page.
+    """
     notifications = Notification.objects.filter(user=request.user)
     return render(request, "user/notification.html", {"notifications": notifications})
 
 
 def address(request):
+    """
+    Renders the user's address management page.
+    """
     user_address = Address.objects.filter(user=request.user, remove_address=True)
     return render(request, "user/address.html", {"user_address": user_address})
 
 
 def edit_address(request, address_id):
+    """
+    Edits a user's saved address.
+    """
     user_address = Address.objects.get(id=address_id)
     if request.method == "POST":
         user_address.remove_address = False
@@ -467,6 +548,9 @@ def edit_address(request, address_id):
 
 
 def add_wishlist(request, variant_id):
+    """
+    Adds a product to the user's wishlist.
+    """
     if request.user.is_authenticated:
         product = Wishlist(item_id=variant_id, user=request.user)
         product.save()
@@ -476,6 +560,9 @@ def add_wishlist(request, variant_id):
 
 
 def view_wishlist(request):
+    """
+    Renders the user's wishlist.
+    """
     if request.user.is_authenticated:
         wishlist_items = Wishlist.objects.filter(user=request.user).select_related(
             "item"
@@ -486,12 +573,18 @@ def view_wishlist(request):
 
 
 def remove_wishlist(request, wishlist_id):
+    """
+    Removes a product from the user's wishlist.
+    """
     wishlist_item = Wishlist.objects.get(id=wishlist_id)
     wishlist_item.delete()
     return redirect(view_wishlist)
 
 
 def profile(request):
+    """
+    Renders the user's profile page.
+    """
     if request.user.is_authenticated:
         user_details = User.objects.get(username=request.user)
         balance = Wallet.objects.get(user=user_details.id)
@@ -502,6 +595,9 @@ def profile(request):
 
 
 def invoice(request, or_id):
+    """
+    Generates and serves an invoice for a specific order in PDF format.
+    """
     ord = Order.objects.get(id=or_id).new_order.all().select_related("item")
     ord_data = Order.objects.get(id=or_id)
     addr = Address.objects.get(id=ord_data.del_add_id)
@@ -533,6 +629,9 @@ def invoice(request, or_id):
 
 
 def apply_coupon(request):
+    """
+    Applies a coupon to the cart and recalculates the total amount.
+    """
     cur_user = request.user
     crt = Cart.objects.filter(user=cur_user, val=False).select_related("prd_id")
     tot = 0
